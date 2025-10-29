@@ -45,7 +45,7 @@ jobs:
       - uses: sonarsource/sonarcloud-github-action@v2
         with:
           args: >
-            -Dsonar.projectKey=performance-test-app
+            -Dsonar.projectKey=JuandaPatra_performance-test-app
             -Dsonar.organization=JuandaPatra
             -Dsonar.sources=.
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
