@@ -46,7 +46,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=JuandaPatra_performance-test-app
-            -Dsonar.organization=JuandaPatra
+            -Dsonar.organization=juandapatra
             -Dsonar.sources=.
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
         env:
