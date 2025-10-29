@@ -67,3 +67,4 @@ jobs:
         with:
           entrypoint: k6
           args: run tests/loadtest.js
+          options: -v ${{ github.workspace }}:/workspace
