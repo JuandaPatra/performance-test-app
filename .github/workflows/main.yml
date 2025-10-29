@@ -10,41 +10,25 @@ jobs:
   lint:
     name: Lint (ESLint)
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Run ESLint
-        run: npm run lint
+      - run: npm ci
+      - run: npm run lint
 
   test:
     name: Unit Test (Jest)
     runs-on: ubuntu-latest
     needs: lint
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Run Unit Tests with Coverage
-        run: npm run test -- --coverage
+      - run: npm ci
+      - run: npm run test -- --coverage
         env:
           CI: true
 
@@ -52,25 +36,17 @@ jobs:
     name: SonarQube Scan
     runs-on: ubuntu-latest
     needs: test
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: SonarQube Scan
-        uses: sonarsource/sonarcloud-github-action@v2
+      - run: npm ci
+      - uses: sonarsource/sonarcloud-github-action@v2
         with:
           args: >
-            -Dsonar.projectKey=JuandaPatra_performance-test-app
-            -Dsonar.organization=juandapatra
+            -Dsonar.projectKey=performance-test-app
+            -Dsonar.organization=JuandaPatra
             -Dsonar.sources=.
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
         env:
@@ -78,19 +54,16 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   k6:
-  name: k6 Smoke Test
-  runs-on: ubuntu-latest
-  needs: sonar
-  if: always()
-
-  steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-
-    - name: Run k6 Smoke Test
-      uses: docker://loadimpact/k6:latest
-      env:
-        BASE_URL: ${{ secrets.BASE_URL }}
-      with:
-        entrypoint: k6
-        args: run tests/loadtest.js
+    name: k6 Smoke Test
+    runs-on: ubuntu-latest
+    needs: sonar
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run k6 Smoke Test
+        uses: docker://loadimpact/k6:latest
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+        with:
+          entrypoint: k6
+          args: run tests/loadtest.js
