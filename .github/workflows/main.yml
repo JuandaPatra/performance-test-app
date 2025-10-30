@@ -66,5 +66,5 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
         with:
           entrypoint: k6
-          args: run tests/loadtest.js
-          options: -v ${{ github.workspace }}:/workspace
+          args: run /github/workspace/tests/loadtest.js
+          
